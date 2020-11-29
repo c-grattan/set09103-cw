@@ -1,0 +1,35 @@
+{% extends "template.html" %}
+
+{% block head %}
+<script>
+	function changeText(text)
+	{
+		document.getElementById("equation").innerHTML = text;
+	}
+</script>
+{% endblock %}
+
+{% block breadcrumbs %}
+<li class="breadcrumb-item active">Browse Equations</li>
+{% endblock %}
+
+{% block content %}
+<div class="row" style="margin-top: 5%;">
+	<div class="col">
+		<h1>Equations</h1>
+
+		<div class="list-group" style="margin-top: 5%;">
+			<a href="/equations/mx+c" class="list-group-item list-group-item-action" onmouseover="changeText('mx + c')">The Placeholder Theorum</a>
+			<a href="/equations/x^2-1" class="list-group-item list-group-item-action" onmouseover="changeText('x^2 - 1')">The Sample Quandary</a>
+		</div>
+	</div>
+
+	<div class="col d-flex justify-content-center">
+		<table style="height: 100%;">
+			<tr>
+				<td><h1 class="display-3" id="equation"></h1></td>
+			</tr>
+		</table>
+	</div>
+</div>
+{% endblock %}
