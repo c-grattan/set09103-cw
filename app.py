@@ -71,7 +71,8 @@ def login():
 
 		if not bcrypt.checkpw(pw, passw):
 			return render_template("login.html", form=request.form, error="Incorrect password")
-
+		
+		session['name'] = name
 		return render_template("successful.html", action="Login"), 200
 
 @app.route('/register/', methods=['GET', 'POST'])
@@ -97,6 +98,24 @@ def register():
 			cursor.execute('INSERT INTO users VALUES("{}", "{}")'.format(name, bcrypt.hashpw(pw, bcrypt.gensalt()).decode('utf-8')))
 			db.commit()
 			return render_template("successful.html", action="Register"), 200
+
+@app.route('/account/')
+@app.route('/account/<name>')
+def account(name=None):
+	if name == None:
+		return redirect(url_for('login'))
+	else:
+		cursor = get_db().cursor()
+		user = cursor.execute('SELECT * FROM users WHERE username = "%s"' % name).fetchone()
+		if not user is None:
+			return render_template("account.html", user=user)
+		else:
+			return render_template("account.html", user=("404 Account not found", None, None)), 404
+
+@app.route('/logout/')
+def logout():
+	session.pop('name', None)
+	return render_template("successful.html", action="Logout")
 
 if __name__ == "__main__":
 	app.run()

@@ -17,7 +17,9 @@
 <div class="row" style="margin-top: 5%;">
 	<div class="col">
 		<h1>Browse User-Made Equations</h1>
-		<h4 class="text-muted">Create an account to make your own!</h4>
+		{% if not session.name %}
+			<h4 class="text-muted">Create an account to make your own!</h4>
+		{% endif %}
 
 		<div class="list-group" style="margin-top: 5%;">
 			<a href="/equations/0" class="list-group-item list-group-item-action" onmouseover="changeText('mx + c')">The Custom Theorum</a>

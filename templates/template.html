@@ -13,7 +13,13 @@
 				<li class="breadcrumb-item"><a href="{{ url_for('index') }}">Website Name</a></li>
 				{% block breadcrumbs %}
 				{% endblock %}
-				<a href="{{ url_for('login') }}" style="position: absolute; right: 15px;">Login</a>
+				<a href="/account/{{ session.name }}" style="position: absolute; right: 15px;">
+					{% if session.name %}
+						{{ session.name }}
+					{% else %}
+						Login
+					{% endif %}
+				</a>
 			</ol>
 		</nav>
 

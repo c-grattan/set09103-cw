@@ -1,0 +1,13 @@
+{% extends "template.html" %}
+
+{% block breadcrumbs %}
+<li class="breadcrumb-item active">Account Management</li>
+{% endblock %}
+
+{% block content %}
+<h1>{{ user[0] }}</h1>
+
+{% if user[0] == session.name %}
+<a href="/logout/">Log out</a>
+{% endif %}
+{% endblock %}
