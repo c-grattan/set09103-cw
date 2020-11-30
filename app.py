@@ -77,7 +77,7 @@ def login():
 			return render_template("login.html", form=request.form, error="Incorrect password")
 		
 		session['name'] = name
-		return render_template("successful.html", action="Login", url="login"), 200
+		return redirect(url_for('account', name=name))
 
 @app.route('/register/', methods=['GET', 'POST'])
 def register():
@@ -110,9 +110,12 @@ def account(name=None):
 		return redirect(url_for('login'))
 	else:
 		cursor = get_db().cursor()
-		user = cursor.execute('SELECT * FROM users WHERE username = "%s"' % name).fetchone()
+		user = cursor.execute('SELECT rowid, * FROM users WHERE username = "%s"' % name).fetchone()
 		if not user is None:
-			return render_template("account.html", user=user)
+			cursor = get_db().cursor()
+			eq = cursor.execute("SELECT rowid, * FROM equations WHERE user = '{}'".format(user[0])).fetchall()
+			print("Equations for user: {}\n{}".format(user[0], eq))
+			return render_template("account.html", user=user, equations=eq)
 		else:
 			if 'name' in session and session['name'] == name:
 				session.pop('name', None)
