@@ -1,7 +1,10 @@
 {% extends "template.html" %}
 
 {% block breadcrumbs%}
-<li class="breadcrumb-item"><a href="/{{ action|lower }}">{{ action }}</a></li>
+{% if action == "Create Equation" %}
+<li class="breadcrumb-item"><a href="/account/{{ session.name }}">{{ session.name }}</a></li>
+{% endif %}
+<li class="breadcrumb-item"><a href="{{ url_for(url) }}">{{ action }}</a></li>
 <li class="breadcrumb-item active">Successful</li>
 {% endblock %}
 

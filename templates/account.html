@@ -7,7 +7,11 @@
 {% block content %}
 <h1>{{ user[0] }}</h1>
 
+{% if user[0] != "404 Account not found" %}
+<a href="/create/">Create new equation</a><br/>
+
 {% if user[0] == session.name %}
 <a href="/logout/">Log out</a>
+{% endif %}
 {% endif %}
 {% endblock %}

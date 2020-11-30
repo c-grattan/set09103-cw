@@ -47,11 +47,15 @@ def index():
 
 @app.route('/equations/')
 def predefined_equations():
-	return render_template("predefined_main.html"), 200
+	cursor = get_db().cursor()
+	eq = cursor.execute("SELECT rowid, * FROM equations WHERE user = -1").fetchall()
+	return render_template("predefined_main.html", equations=eq), 200
 
 @app.route('/usermade/')
 def custom_equations():
-	return render_template("custom_main.html"), 200
+	cursor = get_db().cursor()
+	eq = cursor.execute("SELECT rowid, * FROM equations WHERE user != -1").fetchall()
+	return render_template("custom_main.html", equations=eq), 200
 
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
@@ -73,7 +77,7 @@ def login():
 			return render_template("login.html", form=request.form, error="Incorrect password")
 		
 		session['name'] = name
-		return render_template("successful.html", action="Login"), 200
+		return render_template("successful.html", action="Login", url="login"), 200
 
 @app.route('/register/', methods=['GET', 'POST'])
 def register():
@@ -97,7 +101,7 @@ def register():
 		else:
 			cursor.execute('INSERT INTO users VALUES("{}", "{}")'.format(name, bcrypt.hashpw(pw, bcrypt.gensalt()).decode('utf-8')))
 			db.commit()
-			return render_template("successful.html", action="Register"), 200
+			return render_template("successful.html", action="Register", url="register"), 200
 
 @app.route('/account/')
 @app.route('/account/<name>')
@@ -110,12 +114,44 @@ def account(name=None):
 		if not user is None:
 			return render_template("account.html", user=user)
 		else:
+			if 'name' in session and session['name'] == name:
+				session.pop('name', None)
 			return render_template("account.html", user=("404 Account not found", None, None)), 404
 
 @app.route('/logout/')
 def logout():
 	session.pop('name', None)
-	return render_template("successful.html", action="Logout")
+	return render_template("successful.html", action="Logout", url="logout")
+
+@app.route('/create/', methods=['GET', 'POST'])
+def create():
+	if request.method == 'GET':
+		if 'name' in session:
+			return render_template("create_equation.html", form=None)
+		else:
+			return redirect(url_for('login'))
+	else:
+		db = get_db()
+		cursor = db.cursor()
+
+		title = sanitize(request.form['title'])
+		definition = sanitize(request.form['definition'])
+
+		#Check title is unique
+		if(not cursor.execute('SELECT * FROM equations WHERE title = "%s"' % title).fetchone() is None):
+			return render_template("create_equation.html", form=request.form, error="Title already in use")
+
+		#Check definition is unique
+		existing = cursor.execute('SELECT * FROM equations WHERE def = "%s"' % definition).fetchone()
+		if(not existing is None):
+			return render_template("create_equation.html", form=request.form, error="There is already an equation with that definition ({})".format(existing[0]))
+
+		#Add equation to db
+		userid = cursor.execute('SELECT rowid FROM users WHERE username = "{}"'.format(session['name'])).fetchone()[0]
+		cursor.execute('INSERT INTO equations VALUES("{}", "{}", {})'.format(title, definition, userid))
+		db.commit()
+
+		return render_template("successful.html", action="Create Equation", url="create")
 
 if __name__ == "__main__":
 	app.run()

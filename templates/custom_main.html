@@ -22,8 +22,9 @@
 		{% endif %}
 
 		<div class="list-group" style="margin-top: 5%;">
-			<a href="/equations/0" class="list-group-item list-group-item-action" onmouseover="changeText('mx + c')">The Custom Theorum</a>
-			<a href="/equations/1" class="list-group-item list-group-item-action" onmouseover="changeText('x^2 - 1')">The Qustom Quandary</a>
+			{% for equation in equations %}
+			<a href="/equations/{{ equation[0] }}" class="list-group-item list-group-item-action" onmouseover="changeText('{{ equation[2] }}')">{{ equation[1] }}</a>
+			{% endfor %}
 		</div>
 	</div>
 

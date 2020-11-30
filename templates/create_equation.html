@@ -1,0 +1,23 @@
+{% extends "template.html" %}
+
+{% block breadcrumbs%}
+<li class="breadcrumb-item"><a href="/account/{{ session.name }}">{{ session.name }}</a></li>
+<li class="breadcrumb-item active">Create Equation</li>
+{% endblock %}
+
+{% block content %}
+<form method="POST">
+	<div class="form-group">
+		<label for="title">Title</label>
+		<input type="text" class="form-control" name="title" value="{{ form.title }}" required>
+	</div>
+	<div class="form-group">
+		<label for="definition">Definition</label>
+		<input type="text" class="form-control" name="definition" value="{{ form.definition }}" required>
+	</div>
+	{% if form %}
+	<div class="alert alert-warning" role="alert">{{ error }}</div>
+	{% endif %}
+	<input type="submit" class="btn btn-primary" value="Submit" />
+</form>
+{% endblock %}
