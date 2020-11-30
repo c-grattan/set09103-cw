@@ -156,5 +156,14 @@ def create():
 
 		return render_template("successful.html", action="Create Equation", url="create")
 
+@app.route('/equations/<equation>')
+def equation(equation=None):
+	cursor = get_db().cursor()
+	eq = cursor.execute("SELECT * FROM equations WHERE rowid = '{}'".format(equation)).fetchone()
+	if eq is not None:
+		return render_template("equation.html", equation=eq)
+	else:
+		return render_template("equation.html", equation=eq), 404
+
 if __name__ == "__main__":
 	app.run()

@@ -1,0 +1,17 @@
+{% extends "template.html" %}
+
+{% block content %}
+<h1>
+{% if equation %}
+
+<div style="text-align: center;">
+	<span class="text-muted">{{ equation[0] }}</span><hr/>
+	<span class="display-1" style="margin-top: 5%;">{{ equation[1] }}</span></h1>
+</div>
+
+{% else %}
+
+404 Equation not found</h1>
+
+{% endif %}
+{% endblock %}
