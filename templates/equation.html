@@ -1,5 +1,14 @@
 {% extends "template.html" %}
 
+{% block breadcrumbs %}
+{% if equation[2] == -1 %}
+<li class="breadcrumb-item"><a href="{{ url_for('predefined_equations') }}">Browse Equations</a></li>
+{% else %}
+<li class="breadcrumb-item"><a href="{{ url_for('custom_equations') }}">Browse Custom Equations</a></li>
+{% endif %}
+<li class="breadcrumb-item active">Browse Equations</li>
+{% endblock %}
+
 {% block content %}
 <h1>
 {% if equation %}

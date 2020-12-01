@@ -2,8 +2,10 @@ from flask import Flask, render_template, request, redirect, url_for, g, session
 import bcrypt
 import sqlite3
 import configparser
+import random
 
 from sanitize_input import sanitize
+from eq_parsing import calcFunc
 
 def init(app):
 	config = configparser.ConfigParser()
@@ -43,7 +45,9 @@ def destroy_db_connection(exception):
 #Server Routes
 @app.route('/')
 def index():
-	return render_template("index.html"), 200
+	cursor = get_db().cursor()
+	featured_equation = random.choice(cursor.execute("SELECT rowid, * FROM equations").fetchall())
+	return render_template("index.html", equation=featured_equation), 200
 
 @app.route('/equations/')
 def predefined_equations():
@@ -164,6 +168,15 @@ def equation(equation=None):
 		return render_template("equation.html", equation=eq)
 	else:
 		return render_template("equation.html", equation=eq), 404
+
+@app.route('/api/<equation>', methods=['POST'])
+def apiSolve(equation=None):
+	if equation is not None:
+		cursor = get_db().cursor()
+		eq = cursor.execute("SELECT * FROM equations WHERE rowid = '{}'".format(equation)).fetchone()[1]
+		return calcFunc(eq, request)
+	else:
+		return 400
 
 if __name__ == "__main__":
 	app.run()

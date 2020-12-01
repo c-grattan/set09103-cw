@@ -3,7 +3,7 @@
 <div style="margin-top: 20%;">
 	<div class="row">
 		<div class="col d-flex justify-content-center">
-			<h1 >Website Name</h1>
+			<h1>f(comp)</h1>
 		</div>
 	</div>
 	<div class="row align-items-center" style="margin-top: 5%;">
@@ -15,10 +15,10 @@
 		</div>
 	</div>
 	<div class="row justify-content-center" style="margin-top: 5%;">
-		<h1 class="font-weight-light">Daily Equation</h1>
+		<h1 class="font-weight-light">Featured Equation</h1>
 	</div>
 	<div class="row justify-content-center">
-		<h1 class="font-weight-light">y = mx + c</h1>
+		<a href="/equations/{{ equation[0] }}"><h1 class="font-weight-light">{{ equation[2] }}</h1></a>
 	</div>
 </div>
 {% endblock %}
