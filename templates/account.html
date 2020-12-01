@@ -24,6 +24,7 @@
 		<li class="list-group" style="width:75%; margin-top: 3%;">
 			{% for equation in equations %}
 			<ul><a href="/equations/{{ equation[0] }}" class="list-group-item list-group-item-action" onmouseover="changeText('{{ equation[2] }}')">{{ equation[1] }}</a></ul>
+			<a href="/delete/{{ equation[0] }}" style="position: absolute; right: 5%;">Delete</a>
 			{% endfor %}
 		</li>
 	</div>

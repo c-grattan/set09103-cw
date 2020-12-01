@@ -111,6 +111,8 @@ def register():
 @app.route('/account/<name>')
 def account(name=None):
 	if name == None:
+		if 'name' in session:
+			return redirect(url_for('account', name=session['name']))
 		return redirect(url_for('login'))
 	else:
 		cursor = get_db().cursor()
@@ -118,7 +120,6 @@ def account(name=None):
 		if not user is None:
 			cursor = get_db().cursor()
 			eq = cursor.execute("SELECT rowid, * FROM equations WHERE user = '{}'".format(user[0])).fetchall()
-			print("Equations for user: {}\n{}".format(user[0], eq))
 			return render_template("account.html", user=user, equations=eq)
 		else:
 			if 'name' in session and session['name'] == name:
@@ -181,6 +182,27 @@ def apiSolve(equation=None):
 			return "Bad values given", 400
 	else:
 		return 400
+
+@app.route('/delete/')
+@app.route('/delete/<equation>')
+def delete(equation=None):
+	if(equation==None):
+		return redirect(url_for('account'))
+
+	db = get_db()
+	cursor = db.cursor()
+
+	eq = cursor.execute("SELECT * FROM equations WHERE rowid = {}".format(equation)).fetchone()
+	if(eq==None):
+		return redirect(url_for('account'))
+	user = cursor.execute("SELECT * FROM users WHERE rowid = {}".format(eq[2])).fetchone()
+
+	if('name' in session and session['name'] == user[0]):
+		cursor.execute("DELETE FROM equations WHERE rowid = {}".format(equation))
+		db.commit()
+		return render_template("successful.html", action="Delete Equation", url="delete")
+	else:
+		return redirect(url_for('login'))
 
 if __name__ == "__main__":
 	app.run()
