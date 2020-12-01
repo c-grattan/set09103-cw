@@ -174,7 +174,11 @@ def apiSolve(equation=None):
 	if equation is not None:
 		cursor = get_db().cursor()
 		eq = cursor.execute("SELECT * FROM equations WHERE rowid = '{}'".format(equation)).fetchone()[1]
-		return calcFunc(eq, request)
+		result = calcFunc(eq, request)
+		if result:
+			return result
+		else:
+			return "Bad values given", 400
 	else:
 		return 400
 
