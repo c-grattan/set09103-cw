@@ -13,6 +13,6 @@ CREATE TABLE equations (
 	user integer
 );
 
-INSERT INTO equations VALUES("The Placeholder Theorum","mx+c", -1);
+INSERT INTO equations VALUES("The Placeholder Theorum","m*x+c", -1);
 INSERT INTO equations VALUES("The Sample Quandary","x**2-1", -1);
-INSERT INTO equations VALUES("Theory of Special Relativity","mc**2", -1);
+INSERT INTO equations VALUES("Theory of Special Relativity","m*c**2", -1);

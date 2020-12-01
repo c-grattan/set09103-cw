@@ -177,14 +177,14 @@ def apiSolve(equation=None):
 		cursor = get_db().cursor()
 		eq = cursor.execute("SELECT * FROM equations WHERE rowid = '{}'".format(equation)).fetchone()[1]
 
-		t = time.time()
-		result = calcFunc(eq, request)
-		t = time.time() - t
-
+		start = time.time()
+		result = calcFunc(eq, request.form)
+		t = time.time() - start
+		
 		if result:
 			ret = {
 				"solution":result,
-				"time":t
+				"time":t*1000
 			}
 			return ret
 		else:
