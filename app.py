@@ -3,6 +3,7 @@ import bcrypt
 import sqlite3
 import configparser
 import random
+import time
 
 from sanitize_input import sanitize
 from eq_parsing import calcFunc
@@ -175,9 +176,17 @@ def apiSolve(equation=None):
 	if equation is not None:
 		cursor = get_db().cursor()
 		eq = cursor.execute("SELECT * FROM equations WHERE rowid = '{}'".format(equation)).fetchone()[1]
+
+		t = time.time()
 		result = calcFunc(eq, request)
+		t = time.time() - t
+
 		if result:
-			return result
+			ret = {
+				"solution":result,
+				"time":t
+			}
+			return ret
 		else:
 			return "Bad values given", 400
 	else:
