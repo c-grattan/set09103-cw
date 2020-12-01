@@ -21,10 +21,15 @@
 		{% if user[1] == session.name %}
 		<a class="text-muted" href="/create/"><h4>Create new equation</h4></a>
 		{% endif %}
-		<li class="list-group" style="width:75%; margin-top: 3%;">
+		<li class="list-group list-group-flush" style="width:75%; margin-top: 3%;">
 			{% for equation in equations %}
-			<ul><a href="/equations/{{ equation[0] }}" class="list-group-item list-group-item-action" onmouseover="changeText('{{ equation[2] }}')">{{ equation[1] }}</a></ul>
-			<a href="/delete/{{ equation[0] }}" style="position: absolute; right: 5%;">Delete</a>
+			<div class="row">
+				<ul><a href="/equations/{{ equation[0] }}" class="a h4" onmouseover="changeText('{{ equation[2] }}')">- {{ equation[1] }}</a></ul>
+				
+				{% if user[1] == session.name %}
+				<a href="/delete/{{ equation[0] }}" style="position: absolute; right: 5%;">Delete</a>
+				{% endif %}
+			</div>
 			{% endfor %}
 		</li>
 	</div>
