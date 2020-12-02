@@ -6,7 +6,7 @@
 {% else %}
 <li class="breadcrumb-item"><a href="{{ url_for('custom_equations') }}">Browse Custom Equations</a></li>
 {% endif %}
-<li class="breadcrumb-item active">Browse Equations</li>
+<li class="breadcrumb-item active">{{ equation[0] }}</li>
 {% endblock %}
 
 {% block content %}
